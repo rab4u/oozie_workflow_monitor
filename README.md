@@ -29,11 +29,10 @@ https://www.anaconda.com/download/
 
 2. please download all the files and directories in /code directory, extract and place it in any of the directory you wish and changes the respective paths in get_monthly_workflows_data.bat file and get_live_workflows_data.bat
 
-
 3. Installing postgresql portable.
 Download the zip file and extract : https://sourceforge.net/projects/postgresqlportable/
 after extracting the start the postgreSQL server by clicking : PostgreSQLPortable application
-Create DB in postgreSQL ( cmd :  CREATE DATABASE oozie_jobs_db )
+Create DB in postgreSQL ( cmd :  CREATE DATABASE oozie_jobs_db)
 
 4. Run the python code : import_oozie_data.py.
 Currently the refresh rate is to 5 mins. you can change refresh rate by modifying the following line of code in the python script : threading.Timer(300.0, Timer).start() 
@@ -41,7 +40,8 @@ cmd : python import_oozie_data.py
 
 5. Now, its time to setup the dashboard
 Installing grafana -  Download and install from the following link : http://docs.grafana.org/installation/windows/
-please follow the link to import Helix Oozie Workflows Monitoring dashboard. 
+setup the data sources to connect with postgreSQL 
+please follow the link how to import the dashboards from json files
 http://docs.grafana.org/features/export_import/#import
 Import the following json files persent in the directory /grafana_oozie_dashboards
 
