@@ -7,7 +7,7 @@ import subprocess
 def Timer():
 	threading.Timer(300.0, Timer).start()
 	
-	subprocess.call([r'<path>\bat\helix_prod_workflows_live.bat'])
+	subprocess.call([r'<path>\bat\workflows_live.bat'])
 	
 	failed_input_file = open(r"<path>\data\json\oozie_jobs_failed_live.json")
 	failed_json_array = json.load(failed_input_file)
