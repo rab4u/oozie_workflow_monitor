@@ -7,7 +7,7 @@ import subprocess
 def Timer():
 	threading.Timer(7200.0, Timer).start()
 	
-	subprocess.call([r'<path>\bat\helix_prod_workflows_get_for_grafana.bat'])
+	subprocess.call([r'<path>\bat\workflows_get_for_grafana.bat'])
 	
 	month_input_file = open(r"<path>\data\json\oozie_jobs_trends.json")
 	month_json_array = json.load(month_input_file)
