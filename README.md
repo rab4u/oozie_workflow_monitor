@@ -32,8 +32,8 @@ https://www.anaconda.com/download/
 
 3. Installing postgresql portable.
 Download the zip file and extract : https://sourceforge.net/projects/postgresqlportable/
-after extracting the start the postgreSQL by clicking : PostgreSQLPortable application
-Create DB with name helix_prod_oozie_jobs_db ( cmd :  CREATE DATABASE oozie_jobs_db )
+after extracting the start the postgreSQL server by clicking : PostgreSQLPortable application
+Create DB in postgreSQL ( cmd :  CREATE DATABASE oozie_jobs_db )
 
 4. Run the python code : import_oozie_data.py.
 Currently the refresh rate is to 5 mins. you can change refresh rate by modifying the following line of code in the python script : threading.Timer(300.0, Timer).start() 
