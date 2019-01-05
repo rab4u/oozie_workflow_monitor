@@ -1,0 +1,2242 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "description": "Live Oozie Jobs Monitor",
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 1,
+  "iteration": 1546685439242,
+  "links": [],
+  "panels": [
+    {
+      "content": "<style type \"text/css\">\r\n<!--\r\n/* @group Blink */\r\n.blink {\r\n\t-webkit-animation: blink .75s linear infinite;\r\n\t-moz-animation: blink .75s linear infinite;\r\n\t-ms-animation: blink .75s linear infinite;\r\n\t-o-animation: blink .75s linear infinite;\r\n\t animation: blink .75s linear infinite;\r\n}\r\n@-webkit-keyframes blink {\r\n\t0% { opacity: 1; }\r\n\t50% { opacity: 1; }\r\n\t50.01% { opacity: 0; }\r\n\t100% { opacity: 0; }\r\n}\r\n@-moz-keyframes blink {\r\n\t0% { opacity: 1; }\r\n\t50% { opacity: 1; }\r\n\t50.01% { opacity: 0; }\r\n\t100% { opacity: 0; }\r\n}\r\n@-ms-keyframes blink {\r\n\t0% { opacity: 1; }\r\n\t50% { opacity: 1; }\r\n\t50.01% { opacity: 0; }\r\n\t100% { opacity: 0; }\r\n}\r\n@-o-keyframes blink {\r\n\t0% { opacity: 1; }\r\n\t50% { opacity: 1; }\r\n\t50.01% { opacity: 0; }\r\n\t100% { opacity: 0; }\r\n}\r\n@keyframes blink {\r\n\t0% { opacity: 1; }\r\n\t50% { opacity: 1; }\r\n\t50.01% { opacity: 0; }\r\n\t100% { opacity: 0; }\r\n}\r\n/* @end */\r\n-->\r\n</style>\r\n\r\n<script>\r\nfunction blinker() {\r\n\t$('.blinking').fadeOut(500);\r\n\t$('.blinking').fadeIn(500);\r\n}\r\nsetInterval(blinker, 1000);\r\n</script>\r\n\r\n<center><H3 style=\"color:green\"> <p class=\"blinking\">LIVE</p> </H3> </center>",
+      "gridPos": {
+        "h": 2,
+        "w": 4,
+        "x": 0,
+        "y": 0
+      },
+      "id": 33,
+      "links": [],
+      "mode": "html",
+      "title": "Connection Status",
+      "type": "text"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "PostgreSQL_helix_prod_oozie_jobs_db",
+      "fill": 1,
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 4,
+        "y": 0
+      },
+      "id": 11,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": true,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "data": null,
+          "format": "time_series",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  starttime AS \"time\",\n  count(appname) as successfull_workflow_count\nFROM oozie_jobs_success_live\nwhere to_char(starttime + '4 hour'::interval,'yyyy-mm-dd') = to_char(now(),'yyyy-mm-dd') and status = 'SUCCEEDED' \nand username in ($user_name)\ngroup by starttime\nORDER BY 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "seqkey"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "oozie_jobs_success_live",
+          "target": "select metric",
+          "timeColumn": "createdtime",
+          "timeColumnType": "timestamp",
+          "type": "timeseries",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Successful Workflow Count by Date Time",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "Workflow Count",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "dateTimeAsIso",
+          "label": "Date Time",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": 10
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "PostgreSQL_helix_prod_oozie_jobs_db",
+      "fill": 1,
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 9,
+        "y": 0
+      },
+      "id": 13,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": true,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "running_workflow_count",
+          "color": "#64b0c8"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "data": null,
+          "format": "time_series",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  starttime AS \"time\",\n  count(appname) as running_workflow_count\nFROM oozie_jobs_running_live\nwhere to_char(starttime + '4 hour'::interval,'yyyy-mm-dd') = to_char(now(),'yyyy-mm-dd') and status = 'RUNNING' \nand username in ($user_name)\ngroup by starttime\nORDER BY 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "seqkey"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "oozie_jobs_success_live",
+          "target": "select metric",
+          "timeColumn": "createdtime",
+          "timeColumnType": "timestamp",
+          "type": "timeseries",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Running Workflow Count by Date Time",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "Workflow Count",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "dateTimeAsIso",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": 10
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "PostgreSQL_helix_prod_oozie_jobs_db",
+      "fill": 1,
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 14,
+        "y": 0
+      },
+      "id": 12,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": true,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "failed_workflow_count",
+          "color": "#bf1b00"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "data": null,
+          "format": "time_series",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  starttime AS \"time\",\n  count(appname) as failed_workflow_count\nFROM oozie_jobs_failed_live\nwhere to_char(starttime + '4 hour'::interval,'yyyy-mm-dd') = to_char(now(),'yyyy-mm-dd') and status = 'FAILED' \nand username in ($user_name)\ngroup by starttime\nORDER BY 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "seqkey"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "oozie_jobs_success_live",
+          "target": "select metric",
+          "timeColumn": "createdtime",
+          "timeColumnType": "timestamp",
+          "type": "timeseries",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "gt",
+          "value": 0,
+          "yaxis": "left"
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Failed Workflow Status by Date Time",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "Workflow Count",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "dateTimeAsIso",
+          "label": "Date Time",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": 10
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "PostgreSQL_helix_prod_oozie_jobs_db",
+      "fill": 1,
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 19,
+        "y": 0
+      },
+      "id": 14,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": true,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [
+        {
+          "alias": "killed_workflow_count",
+          "color": "#bf1b00"
+        }
+      ],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "data": null,
+          "format": "time_series",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  starttime AS \"time\",\n  count(appname) as killed_workflow_count\nFROM oozie_jobs_killed_live\nwhere to_char(starttime + '4 hour'::interval,'yyyy-mm-dd') = to_char(now(),'yyyy-mm-dd') and status = 'KILLED' \nand username in ($user_name)\ngroup by starttime\nORDER BY 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "seqkey"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "oozie_jobs_success_live",
+          "target": "select metric",
+          "timeColumn": "createdtime",
+          "timeColumnType": "timestamp",
+          "type": "timeseries",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "gt",
+          "value": 0,
+          "yaxis": "left"
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Killed Workflow Status by Date Time",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": "Workflow Count",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "dateTimeAsIso",
+          "label": "",
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": 10
+      }
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorPostfix": false,
+      "colorValue": true,
+      "colors": [
+        "#3f6833",
+        "rgb(136, 255, 6)",
+        "#3f6833"
+      ],
+      "datasource": "PostgreSQL_helix_prod_oozie_jobs_db",
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 0,
+        "y": 2
+      },
+      "id": 2,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "#e5ac0e",
+        "full": true,
+        "lineColor": "#58140c",
+        "show": false
+      },
+      "tableColumn": "SUCESS_COUNT",
+      "targets": [
+        {
+          "data": null,
+          "format": "table",
+          "group": [
+            {
+              "params": [
+                "seqkey"
+              ],
+              "type": "column"
+            }
+          ],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  count(1) AS \"SUCESS_COUNT\"\nFROM oozie_jobs_success_live\nwhere to_char(starttime + '4 hour'::interval,'yyyy-mm-dd') = to_char(now(),'yyyy-mm-dd') and status = 'SUCCEEDED' \nand username in ($user_name)",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "seqKey"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "SUCESS_COUNT"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "oozie_jobs_success_live",
+          "target": "select metric",
+          "timeColumn": "seqkey",
+          "timeColumnType": "int4",
+          "type": "timeseries",
+          "where": []
+        }
+      ],
+      "thresholds": "",
+      "title": "Total No.of Workflow Successful",
+      "transparent": false,
+      "type": "singlestat",
+      "valueFontSize": "100%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorPostfix": false,
+      "colorValue": true,
+      "colors": [
+        "#64b0c8",
+        "#64b0c8",
+        "#64b0c8"
+      ],
+      "datasource": "PostgreSQL_helix_prod_oozie_jobs_db",
+      "description": "",
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 0,
+        "y": 5
+      },
+      "id": 7,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "#e5ac0e",
+        "full": true,
+        "lineColor": "#58140c",
+        "show": false
+      },
+      "tableColumn": "RUNNING_COUNT",
+      "targets": [
+        {
+          "data": null,
+          "format": "table",
+          "group": [
+            {
+              "params": [
+                "seqkey"
+              ],
+              "type": "column"
+            }
+          ],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  count(1) AS \"RUNNING_COUNT\"\nFROM oozie_jobs_running_live\nwhere to_char(starttime + '4 hour'::interval,'yyyy-mm-dd') = to_char(now(),'yyyy-mm-dd') and status = 'RUNNING' \nand username in ($user_name)",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "seqKey"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "SUCESS_COUNT"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "oozie_jobs_success_live",
+          "target": "select metric",
+          "timeColumn": "seqkey",
+          "timeColumnType": "int4",
+          "type": "timeseries",
+          "where": []
+        }
+      ],
+      "thresholds": "",
+      "title": "Total No.of Workflow Running",
+      "transparent": false,
+      "type": "singlestat",
+      "valueFontSize": "100%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "columns": [],
+      "datasource": "PostgreSQL_helix_prod_oozie_jobs_db",
+      "description": "",
+      "fontSize": "100%",
+      "gridPos": {
+        "h": 8,
+        "w": 4,
+        "x": 4,
+        "y": 6
+      },
+      "id": 22,
+      "links": [],
+      "pageSize": 100,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": null,
+        "desc": false
+      },
+      "styles": [
+        {
+          "alias": "",
+          "colorMode": "cell",
+          "colors": [
+            "#052b51",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "Total No.of Workflows",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": "cell",
+          "colors": [
+            "#64b0c8",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "Hourly",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "data": null,
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "select max(successfull_workflow_count) as \"Count\",time || ':00 - ' || time+1 || ':00' as \"Hourly\" from (SELECT\r\n  extract(hour from createdtime + '4 hour'::interval) AS \"time\",\r\n  count(appname) as successfull_workflow_count\r\nFROM oozie_jobs_success_live\r\nwhere to_char(starttime + '4 hour'::interval,'yyyy-mm-dd') = to_char(now(),'yyyy-mm-dd') \r\n-- and status = 'SUCCEEDED' \r\nand username in ($user_name)\r\ngroup by extract(hour from createdtime + '4 hour'::interval)\r\nORDER BY 1 ) src\r\ngroup by time\r\nORDER by cast(time as INT) desc",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "target": "select metric",
+          "timeColumn": "time",
+          "type": "table",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Workflow Occupancy Hourly",
+      "transform": "table",
+      "type": "table"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": true,
+      "colors": [
+        "#d44a3a",
+        "#962d82",
+        "#962d82"
+      ],
+      "datasource": "PostgreSQL_helix_prod_oozie_jobs_db",
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 8,
+        "y": 6
+      },
+      "id": 30,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": true,
+        "lineColor": "rgb(31, 120, 193)",
+        "show": false
+      },
+      "tableColumn": "long_running_count",
+      "targets": [
+        {
+          "data": null,
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT count(appName) as long_running_count\r\nfrom oozie_jobs_running_live\r\nwhere to_char(starttime + '4 hour'::interval,'yyyy-mm-dd') = to_char(now(),'yyyy-mm-dd') and status = 'RUNNING' \r\nand username in ($user_name)\r\nand (EXTRACT(EPOCH FROM current_timestamp - (startTime + '4 hour'::interval))/3600)::Integer > 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "target": "select metric",
+          "timeColumn": "time",
+          "type": "timeseries",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "thresholds": "",
+      "title": "Total No.of Long Running Workflows > 1 Hour",
+      "type": "singlestat",
+      "valueFontSize": "150%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "columns": [],
+      "datasource": "PostgreSQL_helix_prod_oozie_jobs_db",
+      "fontSize": "80%",
+      "gridPos": {
+        "h": 8,
+        "w": 10,
+        "x": 14,
+        "y": 6
+      },
+      "id": 6,
+      "links": [],
+      "pageSize": null,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 3,
+        "desc": false
+      },
+      "styles": [
+        {
+          "alias": "workflowurl",
+          "colorMode": "value",
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "link": false,
+          "linkTargetBlank": true,
+          "linkUrl": "http://dolinux759.hq.emirates.com:8888/oozie/list_oozie_workflow/",
+          "mappingType": 1,
+          "pattern": "workflowurl",
+          "preserveFormat": false,
+          "sanitize": false,
+          "thresholds": [
+            "50",
+            "80"
+          ],
+          "type": "string"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "starttime",
+          "thresholds": [],
+          "type": "date",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "endtime",
+          "thresholds": [],
+          "type": "date",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": "cell",
+          "colors": [
+            "#e24d42",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "appname",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "decimals": 2,
+          "pattern": "/.*/",
+          "thresholds": [],
+          "type": "number",
+          "unit": "short"
+        }
+      ],
+      "targets": [
+        {
+          "data": null,
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT AppName,StartTime,EndTime,Status,UserName,'http://dolinux759.hq.emirates.com:8888/oozie/list_oozie_workflow/' || id as workflowURL\nfrom oozie_jobs_killed_live\nwhere to_char(starttime + '4 hour'::interval,'yyyy-mm-dd') = to_char(now(),'yyyy-mm-dd') and status = 'KILLED' \nand username in ($user_name)\nand status in ($workflow_status)",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "target": "select metric",
+          "timeColumn": "time",
+          "type": "table",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT appName,startTime,endTime,status,userName,'http://dolinux759.hq.emirates.com:8888/oozie/list_oozie_workflow/' || id as workflowURL\nfrom oozie_jobs_failed_live\nwhere to_char(starttime + '4 hour'::interval,'yyyy-mm-dd') = to_char(now(),'yyyy-mm-dd') and status = 'FAILED' \nand username in ($user_name)\nand status in ($workflow_status)",
+          "refId": "B",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT appName,startTime,endTime,status,userName,'http://dolinux759.hq.emirates.com:8888/oozie/list_oozie_workflow/' || id as workflowURL\nfrom oozie_jobs_running_live\nwhere to_char(starttime + '4 hour'::interval,'yyyy-mm-dd') = to_char(now(),'yyyy-mm-dd') and status = 'RUNNING' \nand username in ($user_name)\nand status in ($workflow_status)",
+          "refId": "C",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT appName,startTime,endTime,status,userName,'http://dolinux759.hq.emirates.com:8888/oozie/list_oozie_workflow/' || id as workflowURL\nfrom oozie_jobs_success_live\nwhere to_char(starttime + '4 hour'::interval,'yyyy-mm-dd') = to_char(now(),'yyyy-mm-dd') and status = 'SUCCEEDED' \nand username in ($user_name)\nand status in ($workflow_status)",
+          "refId": "D",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Workflows List",
+      "transform": "table",
+      "transparent": false,
+      "type": "table"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorPostfix": false,
+      "colorValue": true,
+      "colors": [
+        "#f2c96d",
+        "#c15c17",
+        "#ba43a9"
+      ],
+      "datasource": "PostgreSQL_helix_prod_oozie_jobs_db",
+      "description": "",
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 0,
+        "y": 8
+      },
+      "id": 31,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "#e5ac0e",
+        "full": true,
+        "lineColor": "#58140c",
+        "show": false
+      },
+      "tableColumn": "RUNNING_COUNT",
+      "targets": [
+        {
+          "data": null,
+          "format": "table",
+          "group": [
+            {
+              "params": [
+                "seqkey"
+              ],
+              "type": "column"
+            }
+          ],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  count(1) AS \"RUNNING_COUNT\"\nFROM oozie_jobs_running_live\nwhere to_char(starttime + '4 hour'::interval,'yyyy-mm-dd') = to_char(now(),'yyyy-mm-dd') and status = 'RUNNING' \nand username != 'scv_ops'",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "seqKey"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "SUCESS_COUNT"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "oozie_jobs_success_live",
+          "target": "select metric",
+          "timeColumn": "seqkey",
+          "timeColumnType": "int4",
+          "type": "timeseries",
+          "where": []
+        }
+      ],
+      "thresholds": "",
+      "title": "Running not in SCV_OPS",
+      "transparent": false,
+      "type": "singlestat",
+      "valueFontSize": "100%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "columns": [],
+      "datasource": "PostgreSQL_helix_prod_oozie_jobs_db",
+      "fontSize": "80%",
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 8,
+        "y": 9
+      },
+      "id": 28,
+      "links": [],
+      "pageSize": null,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": 1,
+        "desc": false
+      },
+      "styles": [
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "starttime",
+          "thresholds": [],
+          "type": "date",
+          "unit": "short"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "elaspedtime",
+          "thresholds": [],
+          "type": "number",
+          "unit": "h"
+        }
+      ],
+      "targets": [
+        {
+          "data": null,
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT appName,\r\nnow() - (startTime + '4 hour'::interval) as elaspedtime,\r\nstartTime as startTime\r\nfrom oozie_jobs_running_live\r\nwhere to_char(starttime + '4 hour'::interval,'yyyy-mm-dd') = to_char(now(),'yyyy-mm-dd') and status = 'RUNNING' \r\nand username in ($user_name)\r\nand (EXTRACT(EPOCH FROM current_timestamp - (startTime + '4 hour'::interval))/3600)::Integer > 1\r\norder by 3 desc",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "target": "select metric",
+          "timeColumn": "time",
+          "type": "table",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Long Running Workflows > 1 Hour",
+      "transform": "table",
+      "type": "table"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorPostfix": false,
+      "colorValue": true,
+      "colors": [
+        "#58140c",
+        "#e24d42",
+        "#e24d42"
+      ],
+      "datasource": "PostgreSQL_helix_prod_oozie_jobs_db",
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 0,
+        "y": 11
+      },
+      "id": 3,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "#e5ac0e",
+        "full": true,
+        "lineColor": "#58140c",
+        "show": false
+      },
+      "tableColumn": "FAILED_COUNT",
+      "targets": [
+        {
+          "data": null,
+          "format": "table",
+          "group": [
+            {
+              "params": [
+                "seqkey"
+              ],
+              "type": "column"
+            }
+          ],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  count(1) AS \"FAILED_COUNT\"\nFROM oozie_jobs_failed_live\nwhere to_char(starttime + '4 hour'::interval,'yyyy-mm-dd') = to_char(now(),'yyyy-mm-dd') and status = 'FAILED' \nand username in ($user_name)",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "seqKey"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "SUCESS_COUNT"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "oozie_jobs_success_live",
+          "target": "select metric",
+          "timeColumn": "seqkey",
+          "timeColumnType": "int4",
+          "type": "timeseries",
+          "where": []
+        }
+      ],
+      "thresholds": "",
+      "title": "Total No.of Workflow Failed",
+      "transparent": false,
+      "type": "singlestat",
+      "valueFontSize": "100%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorPostfix": false,
+      "colorValue": true,
+      "colors": [
+        "#cca300",
+        "#cca300",
+        "#eab839"
+      ],
+      "datasource": "PostgreSQL_helix_prod_oozie_jobs_db",
+      "description": "",
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 0,
+        "y": 14
+      },
+      "id": 4,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "#e5ac0e",
+        "full": true,
+        "lineColor": "#58140c",
+        "show": false
+      },
+      "tableColumn": "KILLED_COUNT",
+      "targets": [
+        {
+          "data": null,
+          "format": "table",
+          "group": [
+            {
+              "params": [
+                "seqkey"
+              ],
+              "type": "column"
+            }
+          ],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  count(1) AS \"KILLED_COUNT\"\nFROM oozie_jobs_killed_live\nwhere to_char(starttime + '4 hour'::interval,'yyyy-mm-dd') = to_char(now(),'yyyy-mm-dd') and status = 'KILLED' \nand username in ($user_name)",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "seqKey"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "SUCESS_COUNT"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "oozie_jobs_success_live",
+          "target": "select metric",
+          "timeColumn": "seqkey",
+          "timeColumnType": "int4",
+          "type": "timeseries",
+          "where": []
+        }
+      ],
+      "thresholds": "",
+      "title": "Total No.of Workflow Killed",
+      "transparent": false,
+      "type": "singlestat",
+      "valueFontSize": "100%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "PostgreSQL_helix_prod_oozie_jobs_db",
+      "fill": 1,
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 4,
+        "y": 14
+      },
+      "id": 25,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "hideZero": true,
+        "max": true,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "data": null,
+          "format": "time_series",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  cast(to_char(createdTime - '4 hour'::interval,'yyyy-mm-dd hh24:mi:ss') as timestamp) AS \"time\",\n  queuename as queuename,\n  avg(used_memory) AS \"used_memory\"\nFROM queue_live\nwhere to_char(createdtime,'yyyy-mm-dd') = to_char(now(),'yyyy-mm-dd')\nand queuename in ($yarn_queue_name)\nGROUP BY  cast(to_char(createdTime - '4 hour'::interval,'yyyy-mm-dd hh24:mi:ss') as timestamp),queuename\nORDER BY 1,3 desc\n",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "target": "select metric",
+          "timeColumn": "time",
+          "type": "timeseries",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "gt",
+          "value": 20000000,
+          "yaxis": "left"
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Queue Memory by Time",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "mbytes",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "PostgreSQL_helix_prod_oozie_jobs_db",
+      "fill": 1,
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 9,
+        "y": 14
+      },
+      "id": 26,
+      "legend": {
+        "alignAsTable": true,
+        "avg": false,
+        "current": true,
+        "hideZero": true,
+        "max": true,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "percentage": false,
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "data": null,
+          "format": "time_series",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  cast(to_char(createdTime - '4 hour'::interval,'yyyy-mm-dd hh24:mi:ss') as timestamp) AS \"time\",\n  queuename as queuename,\n  avg(used_vcores) AS \"used_vcores\"\nFROM queue_live\nwhere to_char(createdtime,'yyyy-mm-dd') = to_char(now(),'yyyy-mm-dd')\nand queuename in ($yarn_queue_name)\nGROUP BY  cast(to_char(createdTime - '4 hour'::interval,'yyyy-mm-dd hh24:mi:ss') as timestamp),queuename\nORDER BY 1,3 desc\n",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "target": "select metric",
+          "timeColumn": "time",
+          "type": "timeseries",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "fill": true,
+          "line": true,
+          "op": "gt",
+          "value": 2500,
+          "yaxis": "left"
+        }
+      ],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Queue VCores by Time",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "none",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "none",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "columns": [],
+      "datasource": "PostgreSQL_helix_prod_oozie_jobs_db",
+      "description": "",
+      "fontSize": "80%",
+      "gridPos": {
+        "h": 8,
+        "w": 10,
+        "x": 14,
+        "y": 14
+      },
+      "id": 23,
+      "links": [],
+      "pageSize": 12,
+      "scroll": true,
+      "showHeader": true,
+      "sort": {
+        "col": null,
+        "desc": false
+      },
+      "styles": [
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "max_memory",
+          "thresholds": [],
+          "type": "number",
+          "unit": "mbytes"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "used_memory",
+          "thresholds": [],
+          "type": "number",
+          "unit": "mbytes"
+        },
+        {
+          "alias": "",
+          "colorMode": null,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "dateFormat": "YYYY-MM-DD HH:mm:ss",
+          "decimals": 2,
+          "mappingType": 1,
+          "pattern": "fair_memory",
+          "thresholds": [],
+          "type": "number",
+          "unit": "mbytes"
+        }
+      ],
+      "targets": [
+        {
+          "data": null,
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "select queuename,used_memory,used_vcores,to_char(createdTime ,'hh24:mi:ss') as CaptureTime,max_memory,max_vcores,fair_memory,fair_vcores from queue_live\nwhere to_char(createdTime,'yyyy-mm-dd') = to_char(now(),'yyyy-mm-dd') and queuename in ($yarn_queue_name)\norder by 4 desc",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "target": "select metric",
+          "timeColumn": "time",
+          "type": "table",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Queue Occupancy by Time",
+      "transform": "table",
+      "type": "table"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": true,
+      "colorPostfix": false,
+      "colorPrefix": false,
+      "colorValue": false,
+      "colors": [
+        "#890f02",
+        "rgb(8, 22, 36)",
+        "#3f6833"
+      ],
+      "datasource": "PostgreSQL_helix_prod_oozie_jobs_db",
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 4,
+        "x": 0,
+        "y": 17
+      },
+      "id": 36,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "postfix": "",
+      "postfixFontSize": "30%",
+      "prefix": "",
+      "prefixFontSize": "30%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "#e5ac0e",
+        "full": true,
+        "lineColor": "#58140c",
+        "show": false
+      },
+      "tableColumn": "capturetime",
+      "targets": [
+        {
+          "data": null,
+          "format": "table",
+          "group": [
+            {
+              "params": [
+                "seqkey"
+              ],
+              "type": "column"
+            }
+          ],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "select to_char(max(createdTime),'hh24:mi:ss') as CaptureTime from queue_live\r\nwhere to_char(createdTime,'yyyy-mm-dd') = to_char(now(),'yyyy-mm-dd')",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "seqKey"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "max"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "SUCESS_COUNT"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "oozie_jobs_success_live",
+          "target": "select metric",
+          "timeColumn": "seqkey",
+          "timeColumnType": "int4",
+          "type": "timeseries",
+          "where": []
+        }
+      ],
+      "thresholds": "",
+      "title": "Refresh Status",
+      "transparent": false,
+      "type": "singlestat",
+      "valueFontSize": "50%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "avg"
+    },
+    {
+      "bgColor": "rgb(17, 29, 40)",
+      "clockType": "24 hour",
+      "countdownSettings": {
+        "customFormat": null,
+        "endCountdownTime": "2019-01-04T08:55:00.000Z",
+        "endText": "00:00:00"
+      },
+      "dateSettings": {
+        "dateFormat": "YYYY-MM-DD",
+        "fontSize": "30px",
+        "fontWeight": "normal",
+        "showDate": true
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 0,
+        "y": 19
+      },
+      "id": 35,
+      "links": [],
+      "mode": "time",
+      "offsetFromUtc": null,
+      "offsetFromUtcMinutes": null,
+      "refreshSettings": {
+        "syncWithDashboard": false
+      },
+      "timeSettings": {
+        "customFormat": "HH:mm:ss",
+        "fontSize": "30px",
+        "fontWeight": "normal"
+      },
+      "title": "Clock",
+      "type": "grafana-clock-panel"
+    }
+  ],
+  "refresh": "5m",
+  "schemaVersion": 16,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "text": "RUNNING",
+          "value": [
+            "RUNNING"
+          ]
+        },
+        "datasource": "PostgreSQL_helix_prod_oozie_jobs_db",
+        "definition": "select 'KILLED' as KILLED, 'FAILED' as FAILED, 'RUNNING' as RUNNING, 'SUCCEEDED'  AS  SUCCEEDED;",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Workflow Status",
+        "multi": true,
+        "name": "workflow_status",
+        "options": [],
+        "query": "select 'KILLED' as KILLED, 'FAILED' as FAILED, 'RUNNING' as RUNNING, 'SUCCEEDED'  AS  SUCCEEDED;",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "text": "scv_ops",
+          "value": [
+            "scv_ops"
+          ]
+        },
+        "datasource": "PostgreSQL_helix_prod_oozie_jobs_db",
+        "definition": "SELECT distinct username from oozie_jobs_killed_live;",
+        "hide": 0,
+        "includeAll": true,
+        "label": "User Name",
+        "multi": true,
+        "name": "user_name",
+        "options": [],
+        "query": "SELECT distinct username from oozie_jobs_killed_live;",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "allValue": null,
+        "current": {
+          "text": "All",
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": "PostgreSQL_helix_prod_oozie_jobs_db",
+        "definition": "select distinct queuename from queue_live ;",
+        "hide": 0,
+        "includeAll": true,
+        "label": "Yarn Queue Name",
+        "multi": true,
+        "name": "yarn_queue_name",
+        "options": [],
+        "query": "select distinct queuename from queue_live ;",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "tagValuesQuery": "",
+        "tags": [],
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      }
+    ]
+  },
+  "time": {
+    "from": "now/d",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": [
+      "5m"
+    ],
+    "time_options": [
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
+    ]
+  },
+  "timezone": "",
+  "title": "Live Oozie Jobs Monitor",
+  "uid": "pwA2ossmk",
+  "version": 233
+}
