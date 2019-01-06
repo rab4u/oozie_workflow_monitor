@@ -12,7 +12,7 @@ Oozie Workflow Monitor is a simple,insightful &amp; agent less live dashboard fo
 # Monthy Trend
 ![](images/monthly_trend_dashboard.png)
 # High Level Architecture
-Helix Oozie Workflow Monitor uses all the open source and light weight components and it can run on any commodity system. 
+Oozie Workflow Monitor uses all the open source and light weight components and it can run on any commodity system. 
 
 Main Components :
 1. Python ( As a ETL Tool)
